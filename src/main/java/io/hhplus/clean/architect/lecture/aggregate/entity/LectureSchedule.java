@@ -1,6 +1,7 @@
 package io.hhplus.clean.architect.lecture.aggregate.entity;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,9 +9,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public record Lecture(
+public record LectureSchedule(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    Long scheduleId,
     Long lectureId,
-    String title
-) implements Serializable {}
+    Timestamp date,
+    int capacity
+) implements Serializable {
+    
+}

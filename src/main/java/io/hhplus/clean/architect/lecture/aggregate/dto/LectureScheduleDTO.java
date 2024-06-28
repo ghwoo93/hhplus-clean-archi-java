@@ -1,11 +1,16 @@
 package io.hhplus.clean.architect.lecture.aggregate.dto;
 
+import java.sql.Timestamp;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class LectureDTO {
+public class LectureScheduleDTO {
+    private Long scheduleId;
     private Long lectureId;
-    private String title;
+    private Timestamp date;
+    private int capacity;
 }
+
