@@ -11,7 +11,7 @@ public class LectureRegistrationMapper {
     }
 
     public static LectureRegistrationDomain toDomain(LectureRegistration entity) {
-        return new LectureRegistrationDomain(entity.registrationId(), entity.userId(), entity.scheduleId(), entity.registrationDate());
+        return new LectureRegistrationDomain(entity.getRegistrationId(), entity.getUserId(), entity.getScheduleId(), entity.getRegistrationDate());
     }
 
     public static LectureRegistration toEntity(LectureRegistrationDomain domain) {

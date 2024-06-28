@@ -6,11 +6,26 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+// @Entity
+// public record Lecture(
+//     @Id
+//     @GeneratedValue(strategy = GenerationType.AUTO)
+//     Long lectureId,
+//     String title
+// ) implements Serializable {}
 
 @Entity
-public record Lecture(
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter @Setter
+public class Lecture implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Long lectureId,
-    String title
-) implements Serializable {}
+    private Long lectureId;
+    private String title;
+}

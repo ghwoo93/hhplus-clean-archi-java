@@ -11,7 +11,7 @@ public class LectureScheduleMapper {
     }
 
     public static LectureScheduleDomain toDomain(LectureSchedule entity) {
-        return new LectureScheduleDomain(entity.scheduleId(), entity.lectureId(), entity.date(), entity.capacity());
+        return new LectureScheduleDomain(entity.getScheduleId(), entity.getLectureId(), entity.getDate(), entity.getCapacity());
     }
 
     public static LectureSchedule toEntity(LectureScheduleDomain domain) {

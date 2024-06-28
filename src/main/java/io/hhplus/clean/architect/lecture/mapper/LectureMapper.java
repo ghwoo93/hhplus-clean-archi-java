@@ -11,8 +11,7 @@ public class LectureMapper {
     }
 
     public static LectureDomain toDomain(Lecture entity) {
-        System.err.println("toDomain" + entity.);
-        return new LectureDomain(entity.lectureId(), entity.title());
+        return new LectureDomain(entity.getLectureId(), entity.getTitle());
     }
 
     public static Lecture toEntity(LectureDomain domain) {
