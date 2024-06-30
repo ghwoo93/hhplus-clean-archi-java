@@ -1,11 +1,12 @@
-package io.hhplus.clean.architect.lecture.repository;
+package io.hhplus.clean.architect.lecture.infra.repository;
 
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
-import io.hhplus.clean.architect.lecture.aggregate.entity.LectureSchedule;
+import io.hhplus.clean.architect.lecture.adapter.repository.LectureScheduleRepository;
+import io.hhplus.clean.architect.lecture.domain.model.LectureSchedule;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.LockModeType;
 import jakarta.persistence.PersistenceContext;
@@ -25,9 +26,8 @@ public class LectureScheduleRepositoryImpl implements LectureScheduleRepository 
     }
 
     @Override
-    public Optional<LectureSchedule> findById(Long scheduleId) {
-        LectureSchedule schedule = entityManager.find(LectureSchedule.class, scheduleId, LockModeType.PESSIMISTIC_WRITE);
-        return Optional.ofNullable(schedule);
+    public Optional<LectureSchedule> findByIdWithLock(Long scheduleId, LockModeType lockModeType) {
+        return Optional.ofNullable(entityManager.find(LectureSchedule.class, scheduleId, lockModeType));
     }
 
     @Override

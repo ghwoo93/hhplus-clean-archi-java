@@ -1,8 +1,8 @@
-package io.hhplus.clean.architect.lecture.repository;
+package io.hhplus.clean.architect.lecture.adapter.repository;
 
 import java.util.List;
 
-import io.hhplus.clean.architect.lecture.aggregate.entity.LectureRegistration;
+import io.hhplus.clean.architect.lecture.domain.model.LectureRegistration;
 
 public interface LectureRegistrationRepository {
     boolean existsByUserIdAndScheduleId(Long userId, Long scheduleId);
