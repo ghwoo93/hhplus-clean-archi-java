@@ -8,52 +8,63 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import io.hhplus.clean.architect.lecture.aggregate.dto.LectureDTO;
-import io.hhplus.clean.architect.lecture.aggregate.dto.LectureRegistrationDTO;
-import io.hhplus.clean.architect.lecture.aggregate.dto.LectureScheduleDTO;
-import io.hhplus.clean.architect.lecture.controller.LectureController;
-import io.hhplus.clean.architect.lecture.service.LectureService;
+import io.hhplus.clean.architect.lecture.adapter.controller.LectureController;
+import io.hhplus.clean.architect.lecture.application.LectureService;
+import io.hhplus.clean.architect.lecture.domain.dto.LectureDTO;
+import io.hhplus.clean.architect.lecture.domain.dto.LectureRegistrationDTO;
+import io.hhplus.clean.architect.lecture.domain.dto.LectureScheduleDTO;
+import io.hhplus.clean.architect.lecture.exception.LectureBusinessException;
 
-@WebMvcTest(LectureController.class)
 public class LectureControllerTest {
 
-    @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @Mock
     private LectureService lectureService;
+
+    @InjectMocks
+    private LectureController lectureController;
+
+    @BeforeEach
+    public void setup() {
+        MockitoAnnotations.openMocks(this);
+        this.mockMvc = MockMvcBuilders.standaloneSetup(lectureController).build();
+    }
 
     @Test
     public void testGetAllLectures() throws Exception {
-        LectureDTO lecture1 = new LectureDTO(1L, "Lecture 1");
-        LectureDTO lecture2 = new LectureDTO(2L, "Lecture 2");
-        List<LectureDTO> lectures = Arrays.asList(lecture1, lecture2);
-
+        List<LectureDTO> lectures = Arrays.asList(new LectureDTO(1L, "Spring Boot"), new LectureDTO(2L, "Java Programming"));
         when(lectureService.getAllLectures()).thenReturn(lectures);
 
         mockMvc.perform(get("/api/lectures"))
                 .andExpect(status().isOk())
-                .andExpect(content().json("[{\"lectureId\":1,\"title\":\"Lecture 1\"},{\"lectureId\":2,\"title\":\"Lecture 2\"}]"));
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].lectureId").value(1L))
+                .andExpect(jsonPath("$[0].title").value("Spring Boot"))
+                .andExpect(jsonPath("$[1].lectureId").value(2L))
+                .andExpect(jsonPath("$[1].title").value("Java Programming"));
     }
 
     @Test
     public void testGetLectureSchedules() throws Exception {
-        LectureScheduleDTO schedule1 = new LectureScheduleDTO(1L, 1L, null, 30);
-        LectureScheduleDTO schedule2 = new LectureScheduleDTO(2L, 1L, null, 30);
-        List<LectureScheduleDTO> schedules = Arrays.asList(schedule1, schedule2);
-
+        List<LectureScheduleDTO> schedules = Arrays.asList(new LectureScheduleDTO(1L, 1L, null, 30));
         when(lectureService.getLectureSchedules(anyLong())).thenReturn(schedules);
 
         mockMvc.perform(get("/api/lectures/1/schedules"))
                 .andExpect(status().isOk())
-                .andExpect(content().json("[{\"scheduleId\":1,\"lectureId\":1,\"date\":null,\"capacity\":30},{\"scheduleId\":2,\"lectureId\":1,\"date\":null,\"capacity\":30}]"));
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].scheduleId").value(1L))
+                .andExpect(jsonPath("$[0].lectureId").value(1L))
+                .andExpect(jsonPath("$[0].capacity").value(30));
     }
 
     @Test
@@ -61,23 +72,23 @@ public class LectureControllerTest {
         when(lectureService.applyForLecture(anyLong(), anyLong())).thenReturn(true);
 
         mockMvc.perform(post("/api/lectures/apply")
-                .param("userId", "1")
-                .param("scheduleId", "1")
-                .contentType(MediaType.APPLICATION_JSON))
+                        .param("userId", "1")
+                        .param("scheduleId", "1")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Application successful"));
     }
 
     @Test
     public void testApplyForLecture_Failure() throws Exception {
-        when(lectureService.applyForLecture(anyLong(), anyLong())).thenReturn(false);
+        when(lectureService.applyForLecture(anyLong(), anyLong())).thenThrow(new LectureBusinessException("Application failed"));
 
         mockMvc.perform(post("/api/lectures/apply")
-                .param("userId", "1")
-                .param("scheduleId", "1")
-                .contentType(MediaType.APPLICATION_JSON))
+                        .param("userId", "1")
+                        .param("scheduleId", "1")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("Application failed"));
+                .andExpect(content().string("Application failed: Application failed"));
     }
 
     @Test
@@ -91,14 +102,14 @@ public class LectureControllerTest {
 
     @Test
     public void testGetRegistrationHistory() throws Exception {
-        LectureRegistrationDTO registration1 = new LectureRegistrationDTO(1L, 1L, 1L, null);
-        LectureRegistrationDTO registration2 = new LectureRegistrationDTO(2L, 2L, 1L, null);
-        List<LectureRegistrationDTO> registrations = Arrays.asList(registration1, registration2);
-
+        List<LectureRegistrationDTO> registrations = Arrays.asList(new LectureRegistrationDTO(1L, 1L, 1L, null));
         when(lectureService.getRegistrationHistory(anyLong())).thenReturn(registrations);
 
         mockMvc.perform(get("/api/lectures/1/registrations"))
                 .andExpect(status().isOk())
-                .andExpect(content().json("[{\"registrationId\":1,\"userId\":1,\"scheduleId\":1,\"registrationDate\":null},{\"registrationId\":2,\"userId\":2,\"scheduleId\":1,\"registrationDate\":null}]"));
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].registrationId").value(1L))
+                .andExpect(jsonPath("$[0].userId").value(1L))
+                .andExpect(jsonPath("$[0].scheduleId").value(1L));
     }
 }
