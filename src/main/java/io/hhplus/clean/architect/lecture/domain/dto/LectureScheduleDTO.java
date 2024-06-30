@@ -1,4 +1,4 @@
-package io.hhplus.clean.architect.lecture.aggregate.dto;
+package io.hhplus.clean.architect.lecture.domain.dto;
 
 import java.sql.Timestamp;
 

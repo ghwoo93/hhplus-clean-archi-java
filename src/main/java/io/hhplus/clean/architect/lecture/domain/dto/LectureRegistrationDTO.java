@@ -1,4 +1,4 @@
-package io.hhplus.clean.architect.lecture.aggregate.domain;
+package io.hhplus.clean.architect.lecture.domain.dto;
 
 import java.sql.Timestamp;
 
@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class LectureRegistrationDomain {
+public class LectureRegistrationDTO {
     private Long registrationId;
     private Long userId;
     private Long scheduleId;

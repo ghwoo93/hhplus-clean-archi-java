@@ -1,4 +1,4 @@
-package io.hhplus.clean.architect.lecture.aggregate.entity;
+package io.hhplus.clean.architect.lecture.domain.model;
 
 import java.io.Serializable;
 
@@ -6,23 +6,16 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-// @Entity
-// public record Lecture(
-//     @Id
-//     @GeneratedValue(strategy = GenerationType.AUTO)
-//     Long lectureId,
-//     String title
-// ) implements Serializable {}
-
+@Table(name = "LECTURE")
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter @Setter
+@Getter
 public class Lecture implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
