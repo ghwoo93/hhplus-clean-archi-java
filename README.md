@@ -72,6 +72,8 @@ erDiagram
         TIMESTAMP registration_date "NOT NULL"
     }
 ```
+![image](https://github.com/ghwoo93/hhplus-lecture-2week/assets/26402238/c24c7b34-d918-4f7a-adea-6c9afe23bc8b)
+
 - 테이블 간 관계성 배제 목적 
     - 관계성을 배제하고 비즈니스 로직으로 데이터 무결성을 보완하였습니다.
     - 복잡한 조인을 감소시켜 고부하를 견딜 수 있도록 설계하였습니다.
