@@ -84,7 +84,8 @@ erDiagram
     - LECTURE_REGISTRATION: 각 특강 일정에 대한 수강 신청 정보를 저장합니다. 
 
 ### Architecture
-![image](https://github.com/ghwoo93/hhplus-lecture-2week/assets/26402238/381558af-3589-4a69-a49a-df0301c7690b)
+![image](https://github.com/ghwoo93/hhplus-lecture-2week/assets/26402238/655e0047-5482-4e74-9a1a-69ace13276e2)
+
 
 
 ### 디렉터리 구조
